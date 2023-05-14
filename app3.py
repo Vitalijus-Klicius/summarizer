@@ -1,7 +1,7 @@
 import streamlit as st
 from docx2txt import process as docx_process
-import pdfplumber
-import requests
+#import pdfplumber
+#import requests
 import io
 import base64
 import tiktoken
