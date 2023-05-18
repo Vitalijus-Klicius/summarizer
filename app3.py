@@ -5,7 +5,6 @@ import io
 import base64
 import openai
 import time
-import docx
 import tiktoken
 from docx import Document
 
