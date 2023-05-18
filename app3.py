@@ -1,12 +1,10 @@
 import streamlit as st
 from docx2txt import process as docx_process
-#import pdfplumber
-#import requests
 import io
 import base64
-import tiktoken
 import openai
 import time
+import docx
 
 # Function to extract and preprocess text from document
 # Function to download result as txt file
@@ -17,8 +15,6 @@ def get_text_download_link(text):
     
 def text_preprocessing(file, split_lenght: int):
     
-    import docx2txt
-    import glob
     import tiktoken
     from docx import Document
     
