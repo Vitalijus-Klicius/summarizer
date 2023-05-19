@@ -68,11 +68,11 @@ def main():
         summarized = []
         
         for chunk in chunks:
-            st.write("Number of words in chunk: ~", len(chunk.split()))
+            st.write("Number of words in chunk: ~", len(chunk))
             text = command + chunk
             response = make_request(text)
             summarized_chunk = response["choices"][0]["message"]["content"]
-            st.write("Number of words in summarized text: ~", len(summarized_chunk.split()))
+            st.write("Number of words in summarized text: ~", len(summarized_chunk))
             time.sleep(20)
             summarized.append(summarized_chunk)
         
