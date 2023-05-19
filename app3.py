@@ -19,15 +19,15 @@ def split_text_into_chunks(text, max_length):
     current_chunk = []
     current_length = 0
     for token in tokens:
-        if current_length + len(token) <= max_length:
+        if current_length + 1 <= max_length:
             current_chunk.append(token)
-            current_length += len(token)
+            current_length += 1
         else:
-            chunks.append(" ".join(current_chunk))
+            chunks.append(current_chunk)
             current_chunk = [token]
-            current_length = len(token)
+            current_length = 1
     if current_chunk:
-        chunks.append(" ".join(current_chunk))
+        chunks.append(current_chunk)
     return chunks
 
 # Function to extract and preprocess text from document
