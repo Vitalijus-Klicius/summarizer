@@ -4,6 +4,7 @@ from docx2txt import process as docx_process
 import io
 import base64
 import openai
+from openai.error import OpenAIError
 import time
 import tiktoken
 from docx import Document
@@ -47,14 +48,23 @@ def text_preprocessing(file, split_lenght: int):
     
     return result
 
-def make_request(question_input: str):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": f"{question_input}"},
-        ]
-    )
-    return response
+def make_request(question_input: str, retries=5):
+    for _ in range(retries):
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": f"{question_input}"},
+                ]
+            )
+            return response
+
+        except OpenAIError as e:
+            print(f"OpenAI API Error: {e}")
+            time.sleep(20)  # wait for 1 second before retrying
+
+    # If we've exhausted all retries and still haven't succeeded, return None
+    return None
 
 # Streamlit App
 def main():
@@ -87,11 +97,15 @@ def main():
             st.write("Number of words in chunk: ~",len(val.split()))
             
             output = make_request(text)
+
+            if output is None: 
+                st.write(f"API call failed after all retries. Skipping this chunk: {val[:200]}...")
+                continue
             response_text = output["choices"][0]["message"]["content"]
             
             st.write("Number of words in summarized text: ~",len(response_text.split()))
 
-            time.sleep(20)
+            #time.sleep()
             
             sumarized.append(output["choices"][0]["message"]["content"])
         
